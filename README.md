@@ -1,6 +1,13 @@
 # Anime Recommendation System
 
-## Server
+## Recommendation systems
+
+ - System based on distance between users (distances: cosine, TBA)
+ - Implicit ALS recommendation (only x86 arch., cold start with high computation cost)
+
+Training data is converted from ratings to binary with rating threshold.
+
+## HTTP Server
 
 Download and unpack data:
 ```
@@ -12,10 +19,10 @@ Start server with command: `python server.py < server.txt`
 
 ## Client
 
-Interfaces: HTTP, Android application.
+Interfaces: HTTP requests, Android application.
 
 Example of HTTP request with curl: `curl -X POST -d 'Girls & Panzer;Shaman King;Death Note' localhost:8080`
 
-Copy `server/anime_titles.txt` to `.../res/raw` for anime title suggestions inside Android application
+Copy `server/anime_titles.txt` to `{ANDROID_APP_PREFIX}/res/raw` for anime title suggestions inside Android application
 
-Security and network warning for Android application: server address is set up to localhost with security check bypass, do not use server and application in real production
+Security and network warning for Android application: server address is set up to localhost with security check bypass, do not use server and application in production
