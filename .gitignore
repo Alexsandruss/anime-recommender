@@ -1,0 +1,6 @@
+*.zip
+*.csv
+html folder
+*.ipynb_checkpoints
+__pycache__
+test*.py
