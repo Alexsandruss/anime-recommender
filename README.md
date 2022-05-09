@@ -26,3 +26,7 @@ Example of HTTP request with curl: `curl -X POST -d 'Girls & Panzer;Shaman King;
 Copy `server/anime_titles.txt` to `{ANDROID_APP_PREFIX}/res/raw` for anime title suggestions inside Android application
 
 Security and network warning for Android application: server address is set up to localhost with security check bypass, do not use server and application in production
+
+### Android application
+
+![Android app demo](https://raw.githubusercontent.com/Alexsandruss/anime-recommender/master/android-app-demo.gif)
