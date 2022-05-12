@@ -7,6 +7,8 @@ import android.os.StrictMode;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -32,8 +34,16 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        useALS = false;
+        Switch algSwitch = (Switch) findViewById(R.id.algorithmSwitch);
+        algSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                useALS = isChecked;
+            }
+        });
+
         userTitles = new ArrayList<>();
-        allTitles = new ArrayList<>();
+        List<String> allTitles = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(getResources().openRawResource(R.raw.anime_titles)))) {
@@ -58,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
             url = new URL(requestURL);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(30000);
-            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(60000);
+            conn.setConnectTimeout(60000);
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
@@ -92,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         return response;
     }
 
-    private List<String> allTitles;
+    private boolean useALS;
     private List<String> userTitles;
 
     private void updateTitles()
@@ -123,10 +133,16 @@ public class MainActivity extends AppCompatActivity {
     public void clearTitles(View view) {
         userTitles.clear();
         updateTitles();
+        final TextView recView = (TextView) findViewById(R.id.recTitlesText);
+        recView.setText("None");
     }
 
     public void sendTitles(View view) {
         String titlesText = "";
+        if (useALS)
+            titlesText += "als;";
+        else
+            titlesText += "cosine similarity;";
         for (int i = 0; i < userTitles.size(); ++i)
         {
             titlesText += userTitles.get(i);

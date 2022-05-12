@@ -49,7 +49,7 @@ class ImplicitALSRecommender(BaseRecommender):
 
 
 class DistanceRecommender(BaseRecommender):
-    def __init__(self, n_similar: int = 50, distance_func=cosine_distances):
+    def __init__(self, n_similar: int = 256, distance_func=cosine_distances):
         self.n_similar = n_similar
         self.distance_func = distance_func
 
