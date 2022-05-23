@@ -62,7 +62,7 @@
 
     <TextView
         android:id="@+id/userTitlesText"
-        android:layout_width="380dp"
+        android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -83,7 +83,7 @@
 
     <TextView
         android:id="@+id/recTitlesText"
-        android:layout_width="380dp"
+        android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -96,9 +96,8 @@
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="22dp"
         android:minHeight="48dp"
-        android:text="Cosine similarity / ALS"
+        android:text="Similarity / Factorization"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clearTitlesButton" />
 

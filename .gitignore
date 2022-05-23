@@ -4,3 +4,4 @@ html folder
 *.ipynb_checkpoints
 __pycache__
 test*.py
+server/anime_titles.txt

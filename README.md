@@ -23,7 +23,7 @@ Interfaces: HTTP requests, Android application.
 
 Example of HTTP request with curl: `curl -X POST -d 'Girls & Panzer;Shaman King;Death Note' localhost:8080`
 
-Copy `server/anime_titles.txt` to `{ANDROID_APP_PREFIX}/res/raw` for anime title suggestions inside Android application
+Copy `server/anime_titles.txt` (generated after server start) to `{ANDROID_APP_PREFIX}/res/raw` for anime title suggestions inside Android application
 
 Security and network warning for Android application: server address is set up to localhost with security check bypass, do not use server and application in production
 

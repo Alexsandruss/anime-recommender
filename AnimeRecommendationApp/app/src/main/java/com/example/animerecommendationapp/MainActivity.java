@@ -68,8 +68,9 @@ public class MainActivity extends AppCompatActivity {
             url = new URL(requestURL);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(60000);
-            conn.setConnectTimeout(60000);
+            // some recommendation methods requires a lot of computation time
+            conn.setReadTimeout(600000);
+            conn.setConnectTimeout(600000);
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
@@ -140,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
     public void sendTitles(View view) {
         String titlesText = "";
         if (useALS)
-            titlesText += "als;";
+            titlesText += "factorization;";
         else
-            titlesText += "cosine similarity;";
+            titlesText += "similarity;";
         for (int i = 0; i < userTitles.size(); ++i)
         {
             titlesText += userTitles.get(i);
@@ -150,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
                 titlesText += ";";
         }
         String requestResult = performPostCall("http://10.0.2.2:8080", titlesText);
-
         final TextView recView = (TextView) findViewById(R.id.recTitlesText);
         recView.setText(requestResult);
     }

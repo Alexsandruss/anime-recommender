@@ -4,9 +4,10 @@ from scipy.sparse import csr_matrix
 from data_reader import (
     csr_vstack, read_ratings_data,
     get_anime_name_from_rebased_index, get_rebased_anime_from_title)
-from recommenders import DistanceRecommender, ImplicitALSRecommender
+from recommenders import DistanceRecommender, ImplicitALSRecommender, NMFRecommender
 import logging
 from timeit import default_timer as timer
+from platform import platform
 
 
 class AnimeHandler(BaseHTTPRequestHandler):
@@ -23,7 +24,7 @@ class AnimeHandler(BaseHTTPRequestHandler):
 
         t0 = timer()
         post_data = self.rfile.read(int(self.headers['Content-Length'])).decode('utf-8').split(';')
-        algorithm, anime_titles = post_data[0], post_data[1:];
+        algorithm, anime_titles = post_data[0], post_data[1:]
         anime_indices = []
         for title in anime_titles:
             if title == '':
@@ -47,10 +48,13 @@ class AnimeHandler(BaseHTTPRequestHandler):
         t1 = timer()
         logging.info(f'User request handling time: {t1 - t0} seconds')
 
-        if algorithm == 'cosine similarity':
+        if algorithm == 'similarity':
             recommender = DistanceRecommender()
-        elif algorithm == 'als':
-            recommender = ImplicitALSRecommender()
+        elif algorithm == 'factorization':
+            if 'x86_64' in platform():
+                recommender = ImplicitALSRecommender()
+            else:
+                recommender = NMFRecommender()
         else:
             raise NotImplementedError('Unknown algorithm')
         recommender.fit(positive_ratings_plus_user_csr)

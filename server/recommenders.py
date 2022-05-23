@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
-import daal4py as d4p
 from sklearn.metrics.pairwise import cosine_distances
+from sklearn.decomposition import non_negative_factorization
 
 
 class BaseRecommender:
@@ -15,10 +15,13 @@ class BaseRecommender:
             return items[:n]
 
 
-# warning: this recommender works only on x86 systems
+# recommender based on decompostion
+# (fastCSR method of Implicit Alternating Least Squares)
+# WARNING: this recommender works only on x86 systems and requires daal4py
 class ImplicitALSRecommender(BaseRecommender):
     def __init__(self, n_factors: int = 32, max_iterations: int = 10,
                  alpha_confidence: float = 40, lambda_regularization: float = 0.01):
+        import daal4py as d4p
         self.n_factors = n_factors
         self.max_iterations = max_iterations
         self.alpha_confidence = alpha_confidence
@@ -48,6 +51,26 @@ class ImplicitALSRecommender(BaseRecommender):
         return self.filter_items(result, exclude_items, n)
 
 
+# recommender based on decomposition (Non-negative Matrix Factorization)
+# WARNING: might be very slow
+class NMFRecommender(ImplicitALSRecommender):
+    def __init__(self, n_factors: int = 32):
+        self.n_factors = n_factors
+
+    def fit(self, x):
+        self.users_factors, self.items_factors, self.n_iterations_ = non_negative_factorization(
+            x, solver='cd',
+            random_state=42,
+            n_components=self.n_factors,
+            tol=1e-6,
+            max_iter=100,
+            alpha_W=0.001,
+            alpha_H=0.001,
+            l1_ratio=0.0001)
+        self.items_factors = self.items_factors.T
+
+
+# recommender based on distance (or inversed similarity) between users
 class DistanceRecommender(BaseRecommender):
     def __init__(self, n_similar: int = 256, distance_func=cosine_distances):
         self.n_similar = n_similar
